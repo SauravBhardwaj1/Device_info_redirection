@@ -1,8 +1,8 @@
 const express = require("express");
-const device = require("device");
+const useragent = require("express-useragent");
 
 const app = express();
-app.use(express.json());
+app.use(useragent.express());
 
 const PORT = process.env.PORT || 3000;
 
@@ -10,24 +10,23 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   try {
-    const userAgent = req.headers["user-agent"];
+    const userAgent = req.useragent;
 
-    const userDevice = device(userAgent);
 
     // Default destination URL
     let destinationURL = "https://platinx.exchange/exc/signup";
 
     // Update destination URL based on detected device
-    if (userDevice.is("bot")) {
+    if (userAgent.is("bot")) {
       // Handling bots if needed
       res.send("Bot detected.");
       return;
-    } else if (userDevice.is("Android")) {
+    } else if (userAgent.is("isAndroid")) {
       destinationURL =
         "https://play.google.com/store/apps/details?id=com.platinx.exchange.flutter_platinx_exchange";
-    } else if (userDevice.is("iPhone") || userDevice.is("iPad")) {
+    } else if (userAgent.is("isiPhone") || userAgent.is("iPad")) {
       destinationURL = "https://apps.apple.com/in/app/platinx/id1637866256";
-    } else if (userDevice.is("Windows")) {
+    } else if (userAgent.is("isDesktop")) {
       // Handle desktop redirection
       destinationURL = "https://platinx.exchange/exc/signup";
     } else {
@@ -46,3 +45,28 @@ app.listen(PORT, () => {
 
 
 
+
+
+
+// // Define a route for generating and redirecting dynamic invite links
+// app.get('/invite', (req, res) => {
+//     const userAgent = req.useragent;
+
+//     // Default destination URL
+//     let destinationURL = 'https://yourapp.com';
+
+//     // Update destination URL based on detected device
+//     if (userAgent.isMobile) {
+//         destinationURL = 'https://play.google.com/store/apps/yourapp'; // Change to your app's Google Play URL
+//     } else if (userAgent.isDesktop) {
+//         // Handle desktop redirection
+//     }
+
+//     // Redirect to the appropriate destination URL
+//     res.redirect(destinationURL);
+// });
+
+// // Start the server
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
