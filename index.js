@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // Define a route for generating and redirecting dynamic invite links
 
-app.get('/invite', (req, res) => {
+app.get('/', (req, res) => {
     const userAgent = req.headers['user-agent'];
     const userDevice = device(userAgent);
 
